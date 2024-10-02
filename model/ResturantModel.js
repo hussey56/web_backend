@@ -1,14 +1,11 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const categories = new Schema(
-  {
-    name: { type: String, required: true },
-    description: { type: String, required: true },
-    imageUrl: { type: String, required: true },
-  },
-  { timestamps: true }
-);
+const categories = new Schema({
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  imageUrl: { type: String, required: true },
+});
 const ResturantSchema = new Schema(
   {
     name: { type: String, required: true },
@@ -18,4 +15,5 @@ const ResturantSchema = new Schema(
   },
   { timestamps: true }
 );
-module.exports = mongoose.model("Resturant", ResturantSchema, "resturants");
+const Resturant = mongoose.model("Resturant", ResturantSchema, "resturants");
+module.exports = { Resturant, categories };

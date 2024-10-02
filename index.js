@@ -4,6 +4,7 @@ const dbConnect = require("./db/database");
 const { PORT } = require("./config/index");
 const cors = require("cors");
 const Router = require("./routes");
+const errorHandler = require("./middleware/errorHandler");
 
 const app = express();
 
@@ -22,4 +23,5 @@ app.use(express.json({ limit: "50mb" }));
 app.use(Router);
 dbConnect();
 
-app.listen(PORT, console.log(`Web Backend is running on the ${PORT}`));
+app.use(errorHandler);
+app.listen(PORT, console.log(`Web Server is running on the ${PORT}`));
