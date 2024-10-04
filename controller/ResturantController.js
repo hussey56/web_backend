@@ -2,25 +2,25 @@ const Joi = require("joi");
 const MongoDbPattern = /^[0-9a-fA-F]{24}$/;
 const { Resturant, categories } = require("../model/ResturantModel");
 const ResturantDTO = require("../dto/ResturantDTO");
+const ProductModel = require("../model/ProductModel");
+const ProductDto = require("../dto/ProductDTO");
 const ResturantController = {
   async register(req, res, next) {
     const resturantSchema = Joi.object({
       name: Joi.string().required(),
       whatsapp: Joi.string().required(),
-      products: Joi.array().required().default([]),
       productCategories: Joi.array().required().default([]),
     });
     const { error } = resturantSchema.validate(req.body);
     if (error) {
       return next(error);
     }
-    const { name, whatsapp, products, productCategories } = req.body;
+    const { name, whatsapp, productCategories } = req.body;
     let newResturant;
     try {
       newResturant = new Resturant({
         name,
         whatsapp,
-        products,
         productCategories,
       });
       await newResturant.save();
@@ -69,6 +69,29 @@ const ResturantController = {
     }
     const Dto = new ResturantDTO(FindResturant);
     return res.status(201).json({ resturant: Dto });
+  },
+  async findResturantProducts(req, res, next) {
+    const getbyIdSchema = Joi.object({
+      id: Joi.string().regex(MongoDbPattern).message("Invalid Id").required(),
+    });
+    const { error } = getbyIdSchema.validate(req.params);
+    if (error) {
+      return next(error);
+    }
+
+    const { id } = req.params;
+    let products;
+    try {
+      products = await ProductModel.find({ resturantId: id });
+    } catch (error) {
+      return next(error);
+    }
+    let productsDto = [];
+    for (let i = 0; i < products.length; i++) {
+      const obj = new ProductDto(products[i]);
+      productsDto.push(obj);
+    }
+    return res.status(200).json({ products: productsDto });
   },
 };
 module.exports = ResturantController;

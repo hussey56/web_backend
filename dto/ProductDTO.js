@@ -10,6 +10,7 @@ class ProductDto {
     this.image = product.imageUrl;
     this.category = product.category.name;
     this.resturant = product.resturantId;
+    this.modifiers = product.modifiers;
   }
 }
 module.exports = ProductDto;

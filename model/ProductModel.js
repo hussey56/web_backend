@@ -8,7 +8,12 @@ const ProductSchema = new Schema(
     price: { type: Number, required: true },
     stock: { type: Number, required: true },
     imageUrl: { type: String, required: true },
-    categoryId: { type: String, required: true },
+    category: { type: Object, required: true },
+    modifiers: {
+      type: Array,
+      required: true,
+      default: [],
+    },
     resturantId: { type: mongoose.SchemaTypes.ObjectId, ref: "Resturant" },
   },
   { timestamps: true }
