@@ -1,5 +1,3 @@
-const ResturantDTO = require("./ResturantDTO");
-
 class ProductDto {
   constructor(product) {
     this.id = product._id;
@@ -8,7 +6,7 @@ class ProductDto {
     this.price = product.price;
     this.stock = product.stock;
     this.image = product.imageUrl;
-    this.category = product.category.name;
+    this.category = product.category;
     this.resturant = product.resturantId;
     this.modifiers = product.modifiers;
   }
