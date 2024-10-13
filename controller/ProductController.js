@@ -62,6 +62,9 @@ const ProductController = {
     const { id } = req.params;
     try {
       product = await Product.findOne({ _id: id }).populate("category");
+      if (!product) {
+        return res.status(404).send("Product not found");
+      }
     } catch (error) {
       return next(error);
     }
@@ -81,6 +84,90 @@ const ProductController = {
       productsDto.push(obj);
     }
     return res.status(200).json({ products: productsDto });
+  },
+  async update(req, res, next) {
+    const RegisterProductSchema = Joi.object({
+      productId: Joi.string().regex(MongoDbPattern).required(),
+      name: Joi.string().required(),
+      description: Joi.string().min(5).required(),
+      price: Joi.number().required(),
+      stock: Joi.number().required(),
+      imageUrl: Joi.string().required(),
+      categoryId: Joi.string().regex(MongoDbPattern).required(),
+      modifiers: Joi.array().required(),
+    });
+    const { error } = RegisterProductSchema.validate(req.body);
+    if (error) {
+      return next(error);
+    }
+
+    const {
+      productId,
+      name,
+      description,
+      price,
+      stock,
+      imageUrl,
+      categoryId,
+      modifiers,
+    } = req.body;
+
+    let product;
+    try {
+      product = await Product.findById(productId);
+      if (!product) {
+        return res.status(404).send("Product not found");
+      }
+    } catch (error) {
+      return next(error);
+    }
+    let ProductCategory;
+    try {
+      ProductCategory = await CategoryModel.findById(categoryId);
+      if (!ProductCategory) {
+        return res.status(404).send("Category not found");
+      }
+    } catch (error) {
+      return next(error);
+    }
+    await Product.updateOne(
+      { _id: productId },
+      {
+        name,
+        description,
+        stock,
+        price,
+        imageUrl,
+        category: ProductCategory._id,
+        modifiers,
+      }
+    );
+    return res.status(200).json({ message: "Product Updated" });
+  },
+  async deleteproduct(req, res, next) {
+    const deleteSchema = Joi.object({
+      id: Joi.string().regex(MongoDbPattern).required(),
+    });
+    const { error } = deleteSchema.validate(req.params);
+    if (error) {
+      return next(error);
+    }
+    let product;
+    const { id } = req.params;
+    try {
+      product = await Product.findOne({ _id: id });
+      if (!product) {
+        return res.status(404).send("Product not found");
+      }
+    } catch (error) {
+      return next(error);
+    }
+    try {
+      await Product.deleteOne({ _id: id });
+    } catch (error) {
+      return next(error);
+    }
+    return res.status(200).json({ message: "Product Deleted" });
   },
 };
 module.exports = ProductController;
