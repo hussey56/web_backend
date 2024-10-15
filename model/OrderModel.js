@@ -2,8 +2,7 @@ const mongoose = require("mongoose");
 
 const OrderItemSchema = mongoose.Schema({
   product: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: "Product",
+    type: String,
     required: true,
   },
   quantity: {
@@ -64,4 +63,5 @@ OrderSchema.pre("save", function (next) {
   order.total_price = totalPrice;
   next();
 });
+
 module.exports = mongoose.model("Order", OrderSchema, "orders");

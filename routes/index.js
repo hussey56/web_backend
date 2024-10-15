@@ -46,6 +46,12 @@ Router.put("/resturant/product/update", ProductController.update);
 // Delete a Product
 Router.delete("/resturant/product/delete/:id", ProductController.deleteproduct);
 
+// Search a Product by name
+Router.get(
+  "/resturant/products/search/:query",
+  ProductController.searchProduct
+);
+
 //  -------------------------------------- # ORDERS ----------------------------------------------
 
 // Place an Order
@@ -56,5 +62,14 @@ Router.get("/resturant/orders/:status", OrderController.readorderbytype);
 
 // Update Order Status
 Router.post("/resturant/order/update-status", OrderController.updateStatus);
+
+// Delete an Order by Admin
+Router.delete("/resturant/order/delete/:id", OrderController.deleteOrder);
+
+// Read all Orders
+Router.get("/resturant/orders", OrderController.readAll);
+
+// Update Order
+Router.put("/resturant/order/update", OrderController.updateOrder);
 
 module.exports = Router;

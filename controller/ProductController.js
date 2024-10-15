@@ -169,5 +169,30 @@ const ProductController = {
     }
     return res.status(200).json({ message: "Product Deleted" });
   },
+  async searchProduct(req, res, next) {
+    const getbyIdSchema = Joi.object({
+      query: Joi.string().required(),
+    });
+    const { error } = getbyIdSchema.validate(req.params);
+    if (error) {
+      return next(error);
+    }
+    const { query } = req.params;
+    let results;
+    try {
+      results = await Product.find({
+        name: { $regex: new RegExp(query, "i") },
+      });
+    } catch (error) {
+      return next(error);
+    }
+
+    let productsDto = [];
+    for (let i = 0; i < results.length; i++) {
+      const obj = new ProductDTO(results[i]);
+      productsDto.push(obj);
+    }
+    return res.status(200).json({ products: productsDto });
+  },
 };
 module.exports = ProductController;
