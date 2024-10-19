@@ -2,17 +2,51 @@ const express = require("express");
 const Router = express.Router();
 const ProductController = require("../controller/ProductController");
 const CategoryController = require("../controller/CategoryController");
-const whatsappClient = require("../services/WhatsappClient");
 const OrderController = require("../controller/OrderController");
-4;
-
+const { authenticateToken, authorizeRole } = require("../middleware/RoleBased");
+const Roles = require("../config/Roles");
+const UserController = require("../controller/UserController");
 // For checking purpose
 Router.get("/test", (req, res) => res.json({ msg: "Working Backend!" }));
 
+//  -------------------------------------- # ADMIN ----------------------------------------------
+
+// Register an Admin
+Router.post(
+  "/admin/register",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
+  UserController.register
+);
+
+// Login User for admin panel
+Router.post("/admin/login", UserController.login);
+
+// Refresh JWT Token
+Router.get("/admin/refresh", authenticateToken, UserController.refresh);
+
+// Update User Details
+Router.put(
+  "/admin/profile/update",
+  authenticateToken,
+  UserController.updateUser
+);
+// Delete a user
+Router.delete(
+  "/admin/user/delete/:id",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
+  UserController.deleteUser
+);
 //  -------------------------------------- # CATEGORY ----------------------------------------------
 
 // Read all Categories
-Router.get("/resturant/categories", CategoryController.readall);
+Router.get(
+  "/resturant/categories",
+  authenticateToken,
+  authorizeRole([Roles.MANAGER, Roles.ADMIN]),
+  CategoryController.readall
+);
 
 // Get Products by Category Id
 Router.get("/resturant/category/:id", CategoryController.readCategoryProduct);
