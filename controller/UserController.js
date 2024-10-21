@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const User = require("../model/UserModel");
 const jwt = require("jsonwebtoken");
-const UserDto = require("../dto/UserDTO.JS");
+const UserDto = require("../dto/UserDTO");
 const passwordPattern = /^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{8,25}/;
 const MongoDbPattern = /^[0-9a-fA-F]{24}$/;
 

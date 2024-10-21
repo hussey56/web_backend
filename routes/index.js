@@ -6,6 +6,7 @@ const OrderController = require("../controller/OrderController");
 const { authenticateToken, authorizeRole } = require("../middleware/RoleBased");
 const Roles = require("../config/Roles");
 const UserController = require("../controller/UserController");
+
 // For checking purpose
 Router.get("/test", (req, res) => res.json({ msg: "Working Backend!" }));
 
@@ -43,8 +44,7 @@ Router.delete(
 // Read all Categories
 Router.get(
   "/resturant/categories",
-  authenticateToken,
-  authorizeRole([Roles.MANAGER, Roles.ADMIN]),
+
   CategoryController.readall
 );
 
@@ -52,21 +52,38 @@ Router.get(
 Router.get("/resturant/category/:id", CategoryController.readCategoryProduct);
 
 // Register a Product Category for a resturant
-Router.post("/resturant/category/new", CategoryController.add);
+Router.post(
+  "/resturant/category/new",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
+  CategoryController.add
+);
 
 // Update a Category
-Router.put("/resturant/category/update", CategoryController.update);
+Router.put(
+  "/resturant/category/update",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
+  CategoryController.update
+);
 
 // Delete the category alongs its all products
 Router.delete(
   "/resturant/category/delete/:categoryId",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
   CategoryController.deleteCategory
 );
 
 //  -------------------------------------- # PRODUCTS ----------------------------------------------
 
 // Create a product for a resturant
-Router.post("/resturant/product/add", ProductController.create);
+Router.post(
+  "/resturant/product/add",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
+  ProductController.create
+);
 
 // Find all products
 Router.get("/resturant/products", ProductController.readall);
@@ -75,10 +92,20 @@ Router.get("/resturant/products", ProductController.readall);
 Router.get("/resturant/products/:id", ProductController.singleread);
 
 // Update a Product
-Router.put("/resturant/product/update", ProductController.update);
+Router.put(
+  "/resturant/product/update",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
+  ProductController.update
+);
 
 // Delete a Product
-Router.delete("/resturant/product/delete/:id", ProductController.deleteproduct);
+Router.delete(
+  "/resturant/product/delete/:id",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
+  ProductController.deleteproduct
+);
 
 // Search a Product by name
 Router.get(
@@ -98,10 +125,20 @@ Router.get("/resturant/orders/:status", OrderController.readorderbytype);
 Router.post("/resturant/order/update-status", OrderController.updateStatus);
 
 // Delete an Order by Admin
-Router.delete("/resturant/order/delete/:id", OrderController.deleteOrder);
+Router.delete(
+  "/resturant/order/delete/:id",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
+  OrderController.deleteOrder
+);
 
 // Read all Orders
-Router.get("/resturant/orders", OrderController.readAll);
+Router.get(
+  "/resturant/orders",
+  authenticateToken,
+  authorizeRole([Roles.ADMIN]),
+  OrderController.readAll
+);
 
 // Update Order
 Router.put("/resturant/order/update", OrderController.updateOrder);
