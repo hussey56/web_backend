@@ -6,9 +6,28 @@ const OrderController = require("../controller/OrderController");
 const { authenticateToken, authorizeRole } = require("../middleware/RoleBased");
 const Roles = require("../config/Roles");
 const UserController = require("../controller/UserController");
+const whatsappClient = require("../services/WhatsappClient");
 
 // For checking purpose
 Router.get("/test", (req, res) => res.json({ msg: "Working Backend!" }));
+
+Router.post("/message", async (req, res) => {
+  try {
+    // const contactId = await whatsappClient.getNumberId(req.body.phone); // Check if the number is on WhatsApp
+    // if (contactId) {
+    await whatsappClient.sendMessage(
+      `${req.body.phone}@c.us`,
+      `*${req.body.message}*`
+    );
+    // } else {
+    //   console.log("The number is not registered on WhatsApp.");
+    // }
+    return res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error });
+  }
+});
 
 //  -------------------------------------- # ADMIN ----------------------------------------------
 

@@ -12,7 +12,7 @@ whatsappClient.on("message", async (msg) => {
   try {
     if (msg.from != "status@broadcast") {
       const contact = await msg.getContact();
-      console.log(contact, msg.body);
+      // console.log(contact, msg.body);
     }
   } catch (error) {
     console.log("Whatsapp error occured +++++");

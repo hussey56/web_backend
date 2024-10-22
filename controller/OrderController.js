@@ -2,6 +2,8 @@ const Joi = require("joi");
 const Order = require("../model/OrderModel");
 const OrderDTO = require("../dto/OrderDTO");
 const MongoDbPattern = /^[0-9a-fA-F]{24}$/;
+const whatsappClient = require("../services/WhatsappClient");
+const { WhatsApp } = require("../config");
 
 const OrderController = {
   async placeorder(req, res, next) {
@@ -43,6 +45,8 @@ const OrderController = {
       return next(error);
     }
     const dto = new OrderDTO(newOrder);
+    const formattedMessage = dto.toWhatsAppMessage();
+    await whatsappClient.sendMessage(`${WhatsApp}@c.us`, `${formattedMessage}`);
     return res.status(201).json({ order: dto });
   },
   async readorderbytype(req, res, next) {

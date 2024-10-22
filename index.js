@@ -5,7 +5,9 @@ const { PORT } = require("./config/index");
 const cors = require("cors");
 const Router = require("./routes");
 const errorHandler = require("./middleware/errorHandler");
+const whatsappClient = require("./services/WhatsappClient");
 
+whatsappClient.initialize();
 const app = express();
 
 app.use(
