@@ -23,7 +23,7 @@ app.post("/show-screen", async (req, res) => {
   console.log(`Request to show screen: ${question}`);
   res.json({ message: `Showing screen: ${question}` });
 });
-app.get("/get-screen", (req, res) => {
+app.get("/check", (req, res) => {
   res.send("Working Sir");
 });
 app.get("/get-screen", (req, res) => {
