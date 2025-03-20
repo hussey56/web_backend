@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -42,4 +41,4 @@ app.get("/get-screen", (req, res) => {
     res.write(`data: ${JSON.stringify(latestScreen)}\n\n`);
   }, 3000);
 });
-app.listen(8000, console.log(`Web Server is running on the 8000`));
+app.listen(7000, console.log(`Web Server is running on the 7000`));
